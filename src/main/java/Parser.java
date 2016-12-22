@@ -17,7 +17,7 @@ public class Parser {
         mapper.registerModule(new JodaModule());
 
         try {
-            final File file = new File(String.valueOf(getClass().getClassLoader().getResource("inputs-sample.yml").getFile()));
+            final File file = new File(String.valueOf(getClass().getClassLoader().getResource("inputs.yml").getFile()));
             return mapper.readValue(file, InputEnvelope.class);
         } catch (final IOException e) {
             System.out.println("Parsing Error!");
@@ -30,7 +30,7 @@ public class Parser {
         mapper.registerModule(new JodaModule());
 
         try {
-            final File file = new File(String.valueOf(getClass().getClassLoader().getResource("configs-sample.yml").getFile()));
+            final File file = new File(String.valueOf(getClass().getClassLoader().getResource("configs.yml").getFile()));
             return mapper.readValue(file, ConfigEnvelope.class);
         } catch (final IOException e) {
             System.out.println("Parsing Error!");
