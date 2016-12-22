@@ -1,0 +1,6 @@
+---
+  configs:
+    -
+      url: "http://www.test.com"
+      auth_token: "abc123"
+      headers: ["id={INPUT}", "apikey={AUTH_TOKEN}", "output=json"]

@@ -8,12 +8,12 @@ import java.io.IOException;
  */
 public class JsonWriter {
 
-    public void writeArray(final JSONArray jsonArray, final String filepath, final String name) throws IOException {
+    public void writeArray(final JSONArray jsonArray, final String filepath) throws IOException {
         FileWriter file = null;
         //TODO Check if jsonArray is null
 
         try {
-            file = new FileWriter(filepath + "/" + name + ".json");
+            file = new FileWriter(filepath + ".json");
             file.write(jsonArray.toString());
         } catch (final IOException e) {
             System.out.println("Error writing array");

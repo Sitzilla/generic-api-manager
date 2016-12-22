@@ -1,3 +1,5 @@
+package models;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -20,7 +22,7 @@ public class Input {
 
     @Override
     public String toString() {
-        return "Input{" +
+        return "models.Input{" +
                 "name='" + name + '\'' +
                 '}';
     }

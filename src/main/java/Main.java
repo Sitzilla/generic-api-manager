@@ -1,4 +1,7 @@
 import com.oracle.javafx.jmx.json.JSONException;
+import models.ConfigEnvelope;
+import models.Input;
+import models.InputEnvelope;
 import org.json.simple.JSONArray;
 
 import java.io.IOException;
@@ -8,25 +11,35 @@ import java.io.IOException;
  */
 public class Main {
 
+    private static String filepath;
+
     public static void main(final String[] args) throws IOException {
+        setArgs(args);
 
         final InputEnvelope inputs = new Parser().parse();
+        final ConfigEnvelope configs = new Parser().parseConfigs();
 
         JSONArray responses = new JSONArray();
 
         for (final Input input : inputs.getInputs()) {
-
-            JSONArray response =  Client.request(input.getName());
+            final JSONArray response =  Client.request(input.getName(), configs.getConfigs().get(0));
             responses = concatArray(response, responses);
-
         }
 
-        // TODO move arguments to configs
-        new JsonWriter().writeArray(responses, "/Users/evan/Documents", "state_reps");
+        new JsonWriter().writeArray(responses, filepath);
 
 
         System.out.println("----------------------------------------");
         System.out.println("Finished exporting all data.");
+    }
+
+    private static void setArgs(final String[] args) {
+        if (args[0] == null) {
+        //TODO throw something
+//            throw new UnprocessableEntityException("Error with program inputs: inputs may not be null");
+        }
+
+        filepath = args[0];
     }
 
     private static JSONArray concatArray(final JSONArray... arrs)

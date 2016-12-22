@@ -1,0 +1,15 @@
+.idea/
+*.iml
+*.iws
+
+.DS_Store
+
+log/
+target/
+*.jar
+*.log
+/*/target/*
+*.pid
+
+configs.yml
+inputs.yml

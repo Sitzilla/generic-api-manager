@@ -1,3 +1,5 @@
+package models;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class InputEnvelope {
 
     @Override
     public String toString() {
-        return "InputEnvelope{" +
+        return "models.InputEnvelope{" +
                 "inputs=" + inputs +
                 '}';
     }

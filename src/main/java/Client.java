@@ -1,3 +1,4 @@
+import models.Config;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -13,15 +14,13 @@ import java.io.IOException;
  */
 public class Client {
 
-    //TODO move to configs
-    private static final String AUTH_TOKEN = "b71e1cea1fb0c0725ef2ad0e8127ebd2";
-    private static final String URL = "http://www.opensecrets.org/api";
-
-    public static JSONArray request(final String input) {
+    public static JSONArray request(final String input, final Config configs) {
         final JSONObject response;
 
+        final String url = buildUrl(input, configs);
+
         try {
-            response = (JSONObject) new JSONParser().parse(makeRequest(input));
+            response = (JSONObject) new JSONParser().parse(makeRequest(url));
         } catch (final ParseException e) {
             System.out.println("Error making call");
             return null;
@@ -31,14 +30,9 @@ public class Client {
         return (JSONArray) new JSONObject((JSONObject) response.get("response")).get("legislator");
     }
 
-    private static String makeRequest(final String input) {
+    private static String makeRequest(final String url) {
         final DefaultHttpClient httpClient = new DefaultHttpClient();
-        //TODO move to configs
-        final HttpGet httpGetRequest = new HttpGet("http://www.opensecrets.org/api?method=getLegislators&id=" + input + "&apikey= " + AUTH_TOKEN + "&output=json");
-//        httpGetRequest.addHeader("apikey", AUTH_TOKEN);
-//        httpGetRequest.addHeader("method", "getLegislators");
-//        httpGetRequest.addHeader("id", input);
-//        httpGetRequest.addHeader("output", "json");
+        final HttpGet httpGetRequest = new HttpGet(url);
 
         try {
             final HttpResponse response = httpClient.execute(httpGetRequest);
@@ -54,4 +48,34 @@ public class Client {
             return null;
         }
     }
+
+    private static String buildUrl(final String input, final Config configs) {
+        String url = configs.getUrl() + "?";
+
+        for (final String header : configs.getHeaders()) {
+
+            if (header.contains("{INPUT}")) {
+                url += header.replace("{INPUT}", input);
+                url += "&";
+                continue;
+            }
+
+            if (header.contains("{AUTH_TOKEN}")) {
+                url += header.replace("{AUTH_TOKEN}", configs.getAuthToken());
+                url += "&";
+                continue;
+            }
+
+            url += header;
+            url += "&";
+        }
+
+        // Strip final & sign
+        if (configs.getHeaders().size() > 0) {
+            return url.substring(0, url.length() - 1);
+        }
+
+        return url;
+    }
+
 }
